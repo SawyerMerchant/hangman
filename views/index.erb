@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="default.css" type="text/css" /> 
+    <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+  </head>
+  <body>
+    <h1>Hang Man</h1>
+    <div class="display">
+      <img id="hangman" src="hangman_<%= miss_count %>.jpg" />
+    </div>
+    <% if params[:level].nil? && params[:guess].nil? %>
+      <p>Select a word length between 3 and 24 characters to begin</p>
+      <form>
+        <!--<input type='text' name = 'level' />-->
+        <select name = 'level'>
+          <% (3..24).step(3) do |num| %>
+            <option value = <%= num %> > <%= num %> </option>
+          <% end %>
+        </select>
+        <input type='submit' value= 'Start' />
+        <!--<input type='submit' value= 'Start' />-->
+      </form>
+    <% else %>
+      <p> Score Board: <br>
+        <% (secret_word).split("").each do |char| %>
+          <% if correct_guesses.include?(char) %>
+            <%= char %>
+          <% else %>
+            _
+          <% end %>
+        <% end %>
+      </p>
+      <p>Misses: <%= misses.join("  ") %></p>
+      <form>
+        <input type='text' name = 'guess' size="3" />
+        <input type='submit' value= 'Guess' />
+      </form>
+      <p><%= miss_count %> guesses remaining</p>
+      <p>... <%= secret_word %> ...</p>
+      <%= message %>
+    <% end %>
+  </body>
+</html>
