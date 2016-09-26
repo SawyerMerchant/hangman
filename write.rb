@@ -8,6 +8,7 @@ require 'yaml'
 @@miss_count = 5
 @@message = ""
 @@level = 0
+@@victory = false
 def reset(level)
   level = level.to_i
   @@secret_word = YAML.load_file('../hang_man/library.yml')[level].sample
@@ -16,6 +17,7 @@ def reset(level)
   @@correct_guesses = []
   @@message = ""
   @@miss_count = 5
+  @@victory = false
 end
 
 def make_guess(guess)
@@ -37,13 +39,20 @@ end
 
 get '/' do
   reset(params[:level]) if params[:level]
+  if params[:restart] #show start menue
+    params.delete :guess
+    @@message = ""
+    @@secret_word = ""
+    @@correct_guesses = []
+    @@victory = false
+  end
   guess = params[:guess]
   # @@level = params[:level].to_i
   # if ('a'..'z').include?(guess.downcase)
   make_guess(guess) if params[:guess]
-  # else
-  #   message = "Careful, you can only guess a single letter at a time"
-  # end
-  erb :index, :locals => { :secret_word => @@secret_word, :misses => @@misses, :miss_count => @@miss_count, :correct_guesses => @@correct_guesses, :message => @@message, :level => @@level }
+  if @@secret_word.split("") - @@correct_guesses == [] && @@secret_word.length > 1
+    @@victory = true
+  end
+  erb :index, :locals => { :secret_word => @@secret_word, :misses => @@misses, :miss_count => @@miss_count, :correct_guesses => @@correct_guesses, :message => @@message, :level => @@level, :victory => @@victory }
   # throw params.inspect
 end
