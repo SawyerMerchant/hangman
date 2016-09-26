@@ -1,37 +1,27 @@
 body {
-    font-family: 'Shadows Into Light', cursive;
+  font-family: 'Shadows Into Light', cursive;
+  text-align: center;
 }
 h1 {
-    text-align: center;
-    font-size: 500%;
+  text-align: center;
+  font-size: 500%;
+}
+.message {
+  color: red;
+  /*font-size: 250%;*/
+  /*margin-top: -75px;*/
 }
 
-.container {
-    width: 100%; 
-    overflow: hidden;
-}
-.left {
-    float: left;
-    width: 600px;
-}
-.right {
-    margin-left: 620px;
-}
-
-/*div {*/
-    /*display: inline-block;*/
-    /*max-width: 10px;*/
-/*    width: 50%;*/
-/*    display: table-cell;*/
-/*}*/
-/*p {*/
-/*    text-align: center;*/
-/*}*/
-#hangman {
-    width: 60%;
-    padding-left: 20%;
+#hangman_image {
+  width: 60%;
+  padding-left: 20%;
 }
 .display {
-   width: 50%;
-   margin: auto;
+  width: 50%;
+  margin: auto;
+  font-size: 125%;
+}
+.misses {
+  text-decoration: line-through;
+  color: red;
 }

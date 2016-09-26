@@ -9,6 +9,8 @@ require 'yaml'
 @@message = ""
 @@level = 0
 @@victory = false
+@@message_2 = ""
+
 def reset(level)
   level = level.to_i
   @@secret_word = YAML.load_file('../hang_man/library.yml')[level].sample
@@ -18,6 +20,7 @@ def reset(level)
   @@message = ""
   @@miss_count = 5
   @@victory = false
+  @@message_2 = ""
 end
 
 def make_guess(guess)
@@ -32,27 +35,31 @@ def make_guess(guess)
       #add to misses
       @@misses << guess if !@@misses.include?(guess)
       @@miss_count -= 1
-      @@message = "nope, no #{guess}!"
+      @@message = "nope, no \"#{guess}\" !"
     end
   end
 end
 
+def restart()
+  params.delete :guess
+  @@message = ""
+  @@secret_word = ""
+  @@correct_guesses = []
+  @@victory = false
+end
+
+def victory()
+  @@victory = true
+  @@message = "You guessed '#{@@secret_word}' and saved our man!"
+  @@message_2 = "\<br\>Would you like to play again?"
+end
+
 get '/' do
   reset(params[:level]) if params[:level]
-  if params[:restart] #show start menue
-    params.delete :guess
-    @@message = ""
-    @@secret_word = ""
-    @@correct_guesses = []
-    @@victory = false
-  end
-  guess = params[:guess]
-  # @@level = params[:level].to_i
-  # if ('a'..'z').include?(guess.downcase)
-  make_guess(guess) if params[:guess]
-  if @@secret_word.split("") - @@correct_guesses == [] && @@secret_word.length > 1
-    @@victory = true
-  end
-  erb :index, :locals => { :secret_word => @@secret_word, :misses => @@misses, :miss_count => @@miss_count, :correct_guesses => @@correct_guesses, :message => @@message, :level => @@level, :victory => @@victory }
+  restart()if params[:restart] #show start menue
+  make_guess(params[:guess]) if params[:guess] #process guess
+  victory() if @@secret_word.split("") - @@correct_guesses == [] && @@secret_word.length > 1
+  # loss() if 
+  erb :index, :locals => { :secret_word => @@secret_word, :misses => @@misses, :miss_count => @@miss_count, :correct_guesses => @@correct_guesses, :message => @@message, :level => @@level, :victory => @@victory, :message_2 => @@message_2 }
   # throw params.inspect
 end

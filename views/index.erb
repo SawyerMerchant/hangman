@@ -4,58 +4,63 @@
     <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
   </head>
   <body>
-    <h1>Hang Man</h1>
-    <%= message %>
-    <div class="display">
-      <img id="hangman" src="hangman_<%= miss_count %>.jpg" />
-    </div>
-    <% if params[:level].nil? && params[:guess].nil? %>
-      <p>Select a word length between 3 and 24 characters to begin</p>
-      <form>
-        <!--<input type='text' name = 'level' />-->
-        <select name = 'level'>
-          <% (3..24).step(3) do |num| %>
-            <option value = <%= num %> > <%= num %> </option>
-          <% end %>
-        </select>
-        <input type='submit' value= 'Start' />
-        <!--<input type='submit' value= 'Start' />-->
-      </form>
+    <%# erb :toppartial %>
+    <% if message == "" %>
+      <h1>Hang Man</h1>
     <% else %>
-      <% if miss_count > 0 %>
-        <p> Score Board: <br>
-          <% (secret_word).split("").each do |char| %>
-            <% if correct_guesses.include?(char) %>
-              <%= char %>
-            <% else %>
-              _
+      <div class="message">
+        <h1><%= message %></h1>
+      </div>
+    <% end %>
+    <div class="display">
+      <img id="hangman_image" src="hangman_<%= miss_count %>.jpg" />
+      <% if params[:level].nil? && params[:guess].nil? %>
+        <p>Select a word length between 3 and 24 characters to begin</p>
+        <form>
+          <select name = 'level'>
+            <% (3..24).step(3) do |num| %>
+              <option value = <%= num %> > <%= num %> </option>
             <% end %>
+          </select>
+          <input type='submit' value= 'Start' />
+          <!--<input type='submit' value= 'Start' />-->
+        </form>
+      <% else %>
+        <% if miss_count > 0 %>
+          <p> Score Board: <br>
+            <% (secret_word).split("").each do |char| %>
+              <% if correct_guesses.include?(char) %>
+                <%= char %>
+              <% else %>
+                _
+              <% end %>
+            <% end %>
+          </p>
+          <p>Misses:<br>[   <%= misses.join("  ") %>   ]</p>
+          <% if victory == false %>
+            <form>
+              <input type='text' name = 'guess' size="3" />
+              <input type='submit' value= 'Guess' />
+            </form>
           <% end %>
-        </p>
-        <p>Misses: <%= misses.join("  ") %></p>
-        <% if victory == false %>
+          <p><%= miss_count %> guesses remaining</p>
+          <p>... <%= secret_word %> ...</p>
+        <% else %>
+          <br>Oh no! You failed to guess '<%= secret_word %>!<br>Would' you like to play again?
           <form>
-            <input type='text' name = 'guess' size="3" />
-            <input type='submit' value= 'Guess' />
+            <input type='hidden' name = 'restart' />
+            <input type='submit' value= 'Restart' />
           </form>
         <% end %>
-        <p><%= miss_count %> guesses remaining</p>
-        <p>... <%= secret_word %> ...</p>
-      <% else %>
-        Oh no! You failed to guess <%= secret_word %>!<br>Would you like to play again?
-        <form>
-          <input type='hidden' name = 'restart' />
-          <input type='submit' value= 'Restart' />
-        </form>
+        <% if victory %>
+          <div class="message"><%= message_2 %></div>
+          <form>
+            <input type='hidden' name = 'restart' />
+            <input type='submit' value= 'Restart' />
+          </form>
+        <% end %>
       <% end %>
-      <% if victory %>
-        You guessed <%= secret_word %> and saved our man!<br>Would you like to play again?
-        <form>
-          <input type='hidden' name = 'restart' />
-          <input type='submit' value= 'Restart' />
-        </form>
-      <% end %>
-    <% end %>
-    correct_guesses.length is <%= correct_guesses.length %>, secret_word.length is <%= secret_word.length %>, subtracting yields <%= secret_word.split("") - correct_guesses %>, and victory is <%= victory %>!
+      correct_guesses.length is <%= correct_guesses.length %>, secret_word.length is <%= secret_word.length %>, subtracting yields <%= secret_word.split("") - correct_guesses %>, and victory is <%= victory %>!
+    </div>
   </body>
 </html>
