@@ -36,16 +36,18 @@
             <% end %>
           </p>
           <p>Misses:<br>[   <%= misses.join("  ") %>   ]</p>
+          <% if params[:cheat] == "true" %>
+            <p>... <%= secret_word %> ...</p>
+          <% end %>
           <% if victory == false %>
             <form>
               <input type='text' name = 'guess' size="3" />
               <input type='submit' value= 'Guess' />
             </form>
           <% end %>
-          <p><%= miss_count %> guesses remaining</p>
-          <p>... <%= secret_word %> ...</p>
+          <!--<p><%# miss_count %> guesses remaining</p>-->
         <% else %>
-          <br>Oh no! You failed to guess '<%= secret_word %>!<br>Would' you like to play again?
+          <br>Oh no! You failed to guess '<%= secret_word %>' !<br>Would you like to play again?
           <form>
             <input type='hidden' name = 'restart' />
             <input type='submit' value= 'Restart' />
@@ -59,7 +61,7 @@
           </form>
         <% end %>
       <% end %>
-      correct_guesses.length is <%= correct_guesses.length %>, secret_word.length is <%= secret_word.length %>, subtracting yields <%= secret_word.split("") - correct_guesses %>, and victory is <%= victory %>!
+      <!--correct_guesses.length is <%# correct_guesses.length %>, secret_word.length is <%# secret_word.length %>, subtracting yields <%# secret_word.split("") - correct_guesses %>, and victory is <%# victory %>!-->
     </div>
   </body>
 </html>
