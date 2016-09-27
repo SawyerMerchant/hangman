@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'sinatra/reloader'
+# require 'sinatra/reloader'
 require 'yaml'
 
 @@secret_word = ""
@@ -13,7 +13,7 @@ require 'yaml'
 
 def reset(level)
   level = level.to_i
-  @@secret_word = YAML.load_file('../hang_man/library.yml')[level].sample
+  @@secret_word = YAML.load_file('library.yml')[level].sample
   # params.delete :guess
   @@misses = []
   @@correct_guesses = []
